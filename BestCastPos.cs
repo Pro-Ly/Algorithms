@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 using System.Collections.Generic;
 
 Console.WriteLine("Hello, World!");
@@ -6,14 +6,14 @@ Console.WriteLine("Hello, World!");
 Circle cast = new Circle()
 {
     pos = new Pos { x = 0.0, y = 0.0, },
-    r = 8.0,
+    r = 3.0,
 };
 
 Circle[] enemies = new Circle[]
 {
-    new Circle { pos = new Pos { x = -2.5,   y = 2.0  },  r = 2.0 },
+    new Circle { pos = new Pos { x = -6.5,   y = 2.0  },  r = 2.0 },
     new Circle { pos = new Pos { x = 4.0,   y = 7.0  },  r = 1.0 },
-    new Circle { pos = new Pos { x = -2.0,  y = 1.5  },  r = 3.0 },
+    new Circle { pos = new Pos { x = -8.0,  y = 1.5  },  r = 3.0 },
     new Circle { pos = new Pos { x = 9.0,   y = 2.0  },  r = 1.5 },
     new Circle { pos = new Pos { x = -6.6,  y = 3.5  },  r = 2.4 },
     new Circle { pos = new Pos { x = -2.0,  y = -8.8 },  r = 1.3 },
@@ -27,7 +27,7 @@ for (int i = 0; i < 10000; i++)
 {
     //Solve(cast, 4, enemies, 3);
 }
-Pos ans = Solve(cast, 5, enemies, 2);
+Pos ans = Solve(cast, 1, enemies, 2);
 Console.WriteLine($"Pos.x = {ans.x} | Pos.y = {ans.y}");
 
 Pos Solve(Circle cast, double spellRadius, Circle[] enemies, int accuracy)
@@ -56,7 +56,7 @@ Pos Solve(Circle cast, double spellRadius, Circle[] enemies, int accuracy)
 
     //第二步 选出最优点
     Pos ans = new Pos();
-    int maxCount = 1;
+    int maxCount = 0;
     for (int i = 0; i <= right; i++)
     {
         //Console.WriteLine($"{enemies[i].pos.x}  {enemies[i].pos.y}");
@@ -105,6 +105,16 @@ Pos Solve(Circle cast, double spellRadius, Circle[] enemies, int accuracy)
                         break;
                     }
                 }
+            }
+        }
+        if (maxCount == 0)
+        {
+            double tempDis = Distance(cast.pos, enemies[i].pos);
+            if (cast.r + spellRadius + enemies[i].r >= tempDis)
+            {
+                maxCount = 1;
+                ans.x = enemies[i].pos.x - enemies[i].r / tempDis * (enemies[i].pos.x - cast.pos.x);
+                ans.y = enemies[i].pos.y - enemies[i].r / tempDis * (enemies[i].pos.y - cast.pos.y);
             }
         }
     }
